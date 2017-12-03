@@ -21,7 +21,7 @@ guard :rails, port: 3000, host: '0.0.0.0' do
 end
 
 guard :rubocop do
-  watch(%r{.+\.rb$})
+  watch(/.+\.rb$/)
   watch(%r{(?:.+/)?\.rubocop(?:_todo)?\.yml$}) { |m| File.dirname(m[0]) }
 end
 
@@ -35,4 +35,20 @@ guard :bundler do
 
   # Assume files are symlinked from somewhere
   files.each { |file| watch(helper.real_path(file)) }
+end
+
+# Usage:
+#     guard :foreman, <options hash>
+#
+# Possible options:
+# * :concurreny - how many of each type of process you would like to run (default is, sensibly, one of each)
+# * :env - one or more .env files to load
+# * :procfile - an alternate Procfile to use (default is Procfile)
+# * :port - an alternate port to use (default is 5000)
+# * :root - an alternate application root
+guard :foreman, procfile: 'Procfile.dev' do
+  # Rails example - Watch controllers, models, helpers, lib, and config files
+  watch(/^app\/(controllers|models|helpers)\/.+\.rb$/)
+  watch(/^lib\/.+\.rb$/)
+  watch(/^config\/*/)
 end
